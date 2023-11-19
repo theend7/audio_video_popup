@@ -1,1 +1,1 @@
-**audio & video popup permission for web browser**
+**audio & video popup permission for devices in web browser**
