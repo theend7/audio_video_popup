@@ -1,3 +1,6 @@
 <button (click)="ui.h.audio({ audio: true })">Audio Popup</button> &nbsp;
-<button (click)="ui.h.video()">Video Popup</button>
-{{ui.msg}}
+<button (click)="ui.h.video({ video: true })">Video Popup</button>
+{{ui.msg}} <br/>
+&nbsp;<video #videoPlayer width="400" height="400" autoplay></video>
+
+

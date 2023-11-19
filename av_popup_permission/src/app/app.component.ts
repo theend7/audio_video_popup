@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 
 type PromiseResultAny = (result: any) => void;
 
@@ -9,6 +9,8 @@ type PromiseResultAny = (result: any) => void;
 })
 
 export class AppComponent {
+
+    @ViewChild('videoPlayer', { static: true }) videoPlayer: ElementRef | undefined;
 
     constructor() {
         return;
@@ -29,19 +31,19 @@ export class AppComponent {
     private _checkAudio(constraint: MediaStreamConstraints): Promise<any> {
         return new Promise<any>((resolve: PromiseResultAny, reject: PromiseResultAny) => {
             window.navigator.mediaDevices.getUserMedia(constraint).then((stream: MediaStream) => {
-                this._closeStream(stream); // stream must be closed for security reasons
+                this._closeStream(stream); // close stream
                 this.ui.msg = 'Your microphone is enabled!';
                 setTimeout(() => {
                     this.ui.msg = '';
-                }, 4000);
+                }, 3000);
                 resolve({});
             }, (err) => {
+                reject({ name: err.name });
+
                 if (err.name == 'NotAllowedError') alert('Requested devices is not allowed, allow audio device(mic) so u can be able to use it.');
                 if (err.name == 'NotFoundError') alert('Make sure you have an audio device on your computer.');
-                if (err.name == 'NotReadableError') alert('Your device can not be used at this time, please try later.');
-                if (err.name == 'OverconstrainedError') alert('Your device can not be found.');
-
-                reject({ name: err.name });
+                if (err.name == 'NotReadableError') alert('Your audio device can not be used at this time, please try again later.');
+                if (err.name == 'OverconstrainedError') alert('Your audio device can not be found.');
 
                 //name: 'NotAllowedError' - Thrown if one or more of the requested source devices cannot be used at this time.
                 //name: 'NotFoundError' - Thrown if no media tracks of the type specified were found that satisfy the given constraints.
@@ -51,8 +53,28 @@ export class AppComponent {
         });
     }
 
-    private _checkVideo(): void {
-        console.log('video!');
+    private _checkVideo(constraint: MediaStreamConstraints): Promise<any> {
+        return new Promise<any>((resolve: PromiseResultAny, reject: PromiseResultAny) => {
+            window.navigator.mediaDevices.getUserMedia(constraint).then((stream: MediaStream) => {
+                if (!this.videoPlayer) return reject({});
+                this.videoPlayer.nativeElement.srcObject = stream;
+                this.ui.msg = 'Video will be active only 10 seconds';
+                setTimeout(() => {
+                    this._closeStream(stream); // close stream
+                    if (!this.videoPlayer) return reject({});
+                    this.videoPlayer.nativeElement.srcObject = null;
+                    this.ui.msg = '';
+                }, 10000);
+                resolve({});
+            }, (err) => {
+                reject({ name: err.name });
+
+                if (err.name == 'NotAllowedError') alert('Requested devices is not allowed, allow video device(cam) so u can be able to use it.');
+                if (err.name == 'NotFoundError') alert('Make sure you have an video device on your computer.');
+                if (err.name == 'NotReadableError') alert('Your video device can not be used at this time, please try again later.');
+                if (err.name == 'OverconstrainedError') alert('Your video device can not be found.');
+            });
+        });
     }
 
     public ui = {
