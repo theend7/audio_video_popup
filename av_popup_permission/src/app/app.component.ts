@@ -38,12 +38,12 @@ export class AppComponent {
                 }, 3000);
                 resolve({});
             }, (err) => {
-                reject({ name: err.name });
-
                 if (err.name == 'NotAllowedError') alert('Requested devices is not allowed, allow audio device(mic) so u can be able to use it.');
                 if (err.name == 'NotFoundError') alert('Make sure you have an audio device on your computer.');
                 if (err.name == 'NotReadableError') alert('Your audio device can not be used at this time, please try again later.');
                 if (err.name == 'OverconstrainedError') alert('Your audio device can not be found.');
+
+                reject({ name: err.name });
 
                 //name: 'NotAllowedError' - Thrown if one or more of the requested source devices cannot be used at this time.
                 //name: 'NotFoundError' - Thrown if no media tracks of the type specified were found that satisfy the given constraints.
@@ -67,12 +67,12 @@ export class AppComponent {
                 }, 10000);
                 resolve({});
             }, (err) => {
-                reject({ name: err.name });
-
                 if (err.name == 'NotAllowedError') alert('Requested devices is not allowed, allow video device(cam) so u can be able to use it.');
                 if (err.name == 'NotFoundError') alert('Make sure you have an video device on your computer.');
                 if (err.name == 'NotReadableError') alert('Your video device can not be used at this time, please try again later.');
                 if (err.name == 'OverconstrainedError') alert('Your video device can not be found.');
+
+                reject({ name: err.name });
             });
         });
     }
