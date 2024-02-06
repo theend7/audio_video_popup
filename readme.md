@@ -17,7 +17,7 @@ Follow these steps to integrate the audio and video popup permission trigger in 
 1. **Clone the Repository:**
     ```bash
     git clone https://github.com/theend7/audio_video_popup.git
-    cd audio_video_popup
+    cd av_popup_permission
     ```
 
 2. **Installation:**
